@@ -3,6 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#ff3b7b" />
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>💘 A Question For You</title>
   <style>
     :root{
@@ -11,16 +14,12 @@
       --card:#ffffffcc;
       --text:#1f1f1f;
       --yes:#ff3b7b;
-      --no:#2f2f2f;
       --shadow: 0 18px 55px rgba(0,0,0,.14);
     }
     *{box-sizing:border-box}
     body{
-      margin:0;
-      min-height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
+      margin:0; min-height:100vh;
+      display:flex; align-items:center; justify-content:center;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
       color:var(--text);
       background:
@@ -36,17 +35,13 @@
         radial-gradient(circle at 40% 80%, rgba(255,59,123,.18) 0 5px, transparent 6px),
         radial-gradient(circle at 70% 25%, rgba(255,59,123,.15) 0 7px, transparent 8px),
         radial-gradient(circle at 88% 60%, rgba(255,59,123,.12) 0 4px, transparent 5px);
-      filter: blur(.2px);
       animation: floaty 8s ease-in-out infinite alternate;
     }
-    @keyframes floaty{
-      from{transform:translateY(-6px)}
-      to{transform:translateY(10px)}
-    }
+    @keyframes floaty{ from{transform:translateY(-6px)} to{transform:translateY(10px)} }
 
     .card{
-      width:min(720px, 92vw);
-      padding:28px 26px 22px;
+      width:min(820px, 92vw);
+      padding:22px 22px 16px;
       border-radius:28px;
       background:var(--card);
       backdrop-filter: blur(10px);
@@ -54,45 +49,61 @@
       border:1px solid rgba(255,255,255,.65);
       position:relative;
     }
+    .toprow{
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      flex-wrap:wrap;
+    }
     .badge{
-      display:inline-flex;
-      gap:10px;
-      align-items:center;
-      padding:10px 14px;
-      border-radius:999px;
+      display:inline-flex; gap:10px; align-items:center;
+      padding:10px 14px; border-radius:999px;
       background: rgba(255,255,255,.8);
       border:1px solid rgba(0,0,0,.06);
-      font-weight:600;
-      letter-spacing:.2px;
+      font-weight:700; letter-spacing:.2px;
     }
     .badge .dot{
       width:10px; height:10px; border-radius:999px;
       background: linear-gradient(135deg, #ff3b7b, #ff8aa8);
       box-shadow: 0 0 0 6px rgba(255,59,123,.12);
     }
-    h1{
-      margin:16px 0 8px;
-      font-size: clamp(28px, 4.6vw, 44px);
-      line-height:1.05;
+
+    .audioPill{
+      display:inline-flex; align-items:center; gap:10px;
+      padding:10px 12px; border-radius:999px;
+      border:1px solid rgba(0,0,0,.07);
+      background: rgba(255,255,255,.78);
+      font-weight:800;
+      cursor:pointer;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
     }
-    .sub{
-      margin:0 0 16px;
-      font-size: clamp(14px, 2.4vw, 18px);
-      opacity:.82;
+    .audioPill small{opacity:.65; font-weight:700}
+    .audioPill .icon{font-size:16px}
+    .audioPill.off{opacity:.75}
+    .audioPill:active{transform:scale(.99)}
+
+    h1{ margin:14px 0 6px; font-size: clamp(28px, 4.6vw, 44px); line-height:1.05; }
+    .sub{ margin:0 0 14px; font-size: clamp(14px, 2.4vw, 18px); opacity:.82; }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap:14px;
     }
+    @media (max-width: 760px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+
     .stage{
       position:relative;
-      height:240px;
-      margin-top:10px;
+      height:260px;
       border-radius:22px;
       border:1px dashed rgba(0,0,0,.10);
       background: rgba(255,255,255,.55);
       overflow:hidden;
     }
     .bubble{
-      position:absolute;
-      left:16px; top:16px;
-      max-width: 78%;
+      position:absolute; left:16px; top:16px;
+      max-width: 86%;
       padding:12px 14px;
       border-radius:18px;
       background:#fff;
@@ -100,20 +111,16 @@
       box-shadow: 0 12px 25px rgba(0,0,0,.08);
       font-size: 15px;
       line-height:1.35;
+      z-index:2;
     }
     .bubble b{color:#ff2f75}
-    .buttons{
-      position:absolute;
-      left:0; top:0; right:0; bottom:0;
-    }
+    .buttons{ position:absolute; left:0; top:0; right:0; bottom:0; }
+
     button{
       position:absolute;
-      border:0;
-      cursor:pointer;
-      border-radius:16px;
-      font-weight:800;
-      letter-spacing:.3px;
-      transition: transform .15s ease, filter .15s ease;
+      border:0; cursor:pointer; border-radius:16px;
+      font-weight:900; letter-spacing:.3px;
+      transition: transform .15s ease, filter .15s ease, left .12s ease, top .12s ease;
       user-select:none;
       -webkit-tap-highlight-color: transparent;
     }
@@ -124,6 +131,7 @@
       box-shadow: 0 16px 30px rgba(255,59,123,.28);
       padding:16px 22px;
       font-size: 18px;
+      z-index:1;
     }
     .no{
       background: rgba(0,0,0,.86);
@@ -131,72 +139,132 @@
       padding:14px 18px;
       font-size: 15px;
       box-shadow: 0 12px 26px rgba(0,0,0,.18);
+      z-index:1;
     }
-    .hint{
+
+    .panel{
+      border-radius:22px;
+      background: rgba(255,255,255,.62);
+      border:1px solid rgba(0,0,0,.07);
+      overflow:hidden;
+      min-height:260px;
       display:flex;
-      justify-content:space-between;
-      gap:10px;
-      margin-top:14px;
+      flex-direction:column;
+    }
+    .panelHeader{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      padding:12px 12px 10px;
+      border-bottom:1px solid rgba(0,0,0,.07);
+      background: rgba(255,255,255,.7);
+    }
+    .panelHeader .title{
+      font-weight:900;
+      letter-spacing:.2px;
+    }
+    .panelHeader .meta{
+      font-size:12px; opacity:.7; font-weight:700;
+    }
+    .photoWrap{
+      position:relative;
+      flex:1;
+      min-height:190px;
+      background:#fff;
+    }
+    .photo{
+      position:absolute; inset:0;
+      width:100%; height:100%;
+      object-fit:cover;
+      opacity:0;
+      transform: scale(1.02);
+      transition: opacity .6s ease, transform 1.2s ease;
+    }
+    .photo.show{
+      opacity:1;
+      transform: scale(1);
+    }
+    .caption{
+      padding:10px 12px 12px;
       font-size:13px;
-      opacity:.75;
+      opacity:.85;
+      line-height:1.35;
+    }
+
+    .hint{
+      display:flex; justify-content:space-between; gap:10px;
+      margin-top:12px; font-size:13px; opacity:.75;
     }
     .tiny{
       font-size:12px;
       opacity:.7;
-      margin-top:10px;
+      margin-top:8px;
       line-height:1.4;
+    }
+    .footer{
+      display:flex; justify-content:space-between; align-items:center;
+      margin-top:12px; gap:10px;
+      font-size:12px; opacity:.7;
+    }
+    .link{
+      text-decoration:none;
+      color:#ff2f75;
+      font-weight:800;
+      cursor:pointer;
     }
 
     /* confetti */
-    .confetti{
-      position:fixed; inset:0; pointer-events:none; overflow:hidden;
-    }
+    .confetti{ position:fixed; inset:0; pointer-events:none; overflow:hidden; }
     .piece{
-      position:absolute;
-      width:10px; height:14px;
-      border-radius:3px;
-      opacity:.95;
-      animation: fall 1.7s linear forwards;
+      position:absolute; width:10px; height:14px; border-radius:3px; opacity:.95;
+      animation: fall 1.8s linear forwards;
     }
     @keyframes fall{
       0%{ transform: translateY(-20px) rotate(0deg); }
-      100%{ transform: translateY(110vh) rotate(540deg); }
+      100%{ transform: translateY(110vh) rotate(600deg); }
     }
 
     /* final overlay */
     .overlay{
       position:fixed; inset:0;
-      display:none;
-      align-items:center;
-      justify-content:center;
+      display:none; align-items:center; justify-content:center;
       padding:20px;
       background: rgba(10,10,10,.35);
       backdrop-filter: blur(6px);
+      z-index:50;
     }
     .modal{
-      width:min(720px, 92vw);
+      width:min(760px, 94vw);
       border-radius:28px;
       background:#fff;
       box-shadow: var(--shadow);
-      padding:26px 22px;
+      padding:18px 18px 16px;
       border: 1px solid rgba(0,0,0,.06);
-      text-align:center;
+      position:relative;
+      overflow:hidden;
     }
-    .modal h2{
-      margin:10px 0 6px;
-      font-size: clamp(26px, 4vw, 38px);
+    .modalTop{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      margin-bottom:8px;
     }
+    .close{
+      border:1px solid rgba(0,0,0,.10);
+      background:#f3f3f6;
+      border-radius:12px;
+      padding:8px 10px;
+      font-weight:900;
+      cursor:pointer;
+      position:static;
+    }
+    .modal h2{ margin:6px 0 6px; font-size: clamp(26px, 4vw, 38px); text-align:center; }
     .modal p{
-      margin:0 auto 18px;
-      max-width: 56ch;
-      opacity:.85;
+      margin:0 auto 14px;
+      max-width: 60ch;
+      opacity:.88;
       line-height:1.45;
+      text-align:center;
     }
     .modal .row{
       display:flex;
-      gap:12px;
       justify-content:center;
-      flex-wrap:wrap;
       margin-top:10px;
     }
     .modal .row button{
@@ -205,27 +273,88 @@
       border-radius:16px;
       font-size:16px;
     }
-    .soft{
-      background:#f1f1f3;
-      color:#1b1b1b;
-      box-shadow:none;
-      border:1px solid rgba(0,0,0,.07);
-      font-weight:800;
+
+    /* ring reveal */
+    .ringStage{
+      height:180px;
+      border-radius:22px;
+      background: radial-gradient(circle at 35% 30%, rgba(255,59,123,.18), transparent 55%),
+                  radial-gradient(circle at 70% 70%, rgba(255,200,90,.22), transparent 55%),
+                  linear-gradient(135deg, #fff, #fff7fb);
+      border:1px solid rgba(0,0,0,.06);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      margin:12px 0 10px;
+      position:relative;
+      overflow:hidden;
+    }
+    .ring{
+      width:84px; height:84px;
+      border-radius:999px;
+      border:10px solid #f2c14e;
+      box-shadow: 0 18px 40px rgba(0,0,0,.12);
+      position:relative;
+      transform: translateY(40px) scale(.6);
+      opacity:0;
+    }
+    .ring:after{
+      content:"";
+      position:absolute;
+      width:22px; height:22px;
+      background: #8ad7ff;
+      border-radius:6px;
+      top:-18px; left:50%;
+      transform: translateX(-50%) rotate(45deg);
+      box-shadow: 0 10px 18px rgba(0,0,0,.10);
+      border: 2px solid rgba(255,255,255,.7);
+    }
+    .ringGlow{
+      position:absolute;
+      width:240px; height:240px;
+      border-radius:999px;
+      background: radial-gradient(circle, rgba(255,59,123,.22), transparent 62%);
+      opacity:0;
+      transform: scale(.9);
+    }
+    .ring.show{
+      opacity:1;
+      animation: ringPop .9s cubic-bezier(.2,.9,.2,1) forwards;
+    }
+    .ringGlow.show{
+      opacity:1;
+      animation: glow 1.3s ease-out forwards;
+    }
+    @keyframes ringPop{
+      0%{ transform: translateY(40px) scale(.6) rotate(-8deg); }
+      60%{ transform: translateY(-4px) scale(1.05) rotate(6deg); }
+      100%{ transform: translateY(0px) scale(1) rotate(0deg); }
+    }
+    @keyframes glow{
+      0%{ transform: scale(.85); opacity:.0; }
+      40%{ transform: scale(1.05); opacity:.9; }
+      100%{ transform: scale(1.15); opacity:.0; }
     }
 
-    .footer{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      margin-top:16px;
-      gap:10px;
-      font-size:12px;
-      opacity:.7;
+    .toast{
+      position:fixed;
+      left:50%;
+      bottom:20px;
+      transform:translateX(-50%);
+      background: rgba(0,0,0,.82);
+      color:#fff;
+      padding:10px 12px;
+      border-radius:14px;
+      font-size:13px;
+      font-weight:800;
+      opacity:0;
+      pointer-events:none;
+      transition: opacity .2s ease, transform .2s ease;
+      z-index:80;
     }
-    .link{
-      text-decoration:none;
-      color:#ff2f75;
-      font-weight:700;
+    .toast.show{
+      opacity:1;
+      transform:translateX(-50%) translateY(-4px);
     }
   </style>
 </head>
@@ -233,36 +362,66 @@
   <div class="hearts"></div>
 
   <div class="card">
-    <div class="badge"><span class="dot"></span><span>Valentine Mode: ON</span></div>
+    <div class="toprow">
+      <div class="badge"><span class="dot"></span><span id="badgeText">Valentine Mode: ON</span></div>
+
+      <!-- Music must be user-started on most phones, so this is the “tap to play” control -->
+      <div class="audioPill off" id="audioPill" title="Tap to play music">
+        <span class="icon" id="audioIcon">🔇</span>
+        <span id="audioLabel">Music</span>
+        <small id="audioSmall">(tap)</small>
+      </div>
+    </div>
+
     <h1 id="title">Hey love… I have a tiny question 💌</h1>
-    <p class="sub" id="subtitle">Answer honestly. (But I may be a little dramatic.)</p>
+    <p class="sub" id="subtitle">No speeches. Just vibes. And one button that behaves suspiciously.</p>
 
-    <div class="stage" id="stage">
-      <div class="bubble" id="bubble">
-        <span id="bubbleText">
-          Will you be my Valentine? <br/>
-          <small>(Warning: the <b>NO</b> button is… shy.)</small>
-        </span>
+    <div class="grid">
+      <!-- LEFT: interactive stage -->
+      <div>
+        <div class="stage" id="stage">
+          <div class="bubble" id="bubble">
+            <span id="bubbleText">
+              Will you be my Valentine? <br/>
+              <small>(The <b>NO</b> button is… athletic.)</small>
+            </span>
+          </div>
+
+          <div class="buttons" id="buttons">
+            <button class="yes" id="yesBtn">YES 💖</button>
+            <button class="no" id="noBtn">No 🙈</button>
+          </div>
+        </div>
+
+        <div class="hint">
+          <span id="counter">No attempts: 0</span>
+          <span id="mood">Mood: 🥺</span>
+        </div>
+
+        <div class="tiny" id="tiny">
+          Tip: the YES button never runs. It’s loyal.
+        </div>
+
+        <div class="footer">
+          <span>Made with love + a tiny bit of chaos.</span>
+          <a class="link" href="#" id="resetLink">Reset</a>
+        </div>
       </div>
 
-      <div class="buttons" id="buttons">
-        <button class="yes" id="yesBtn">YES 💖</button>
-        <button class="no" id="noBtn">No 🙈</button>
+      <!-- RIGHT: slideshow -->
+      <div class="panel">
+        <div class="panelHeader">
+          <div class="title">Our moments ✨</div>
+          <div class="meta" id="slideMeta">1 / 4</div>
+        </div>
+        <div class="photoWrap">
+          <img class="photo" id="p1" alt="photo 1">
+          <img class="photo" id="p2" alt="photo 2">
+        </div>
+        <div class="caption" id="caption">
+          (Add your photos in <b>/photos</b> — edit captions in the code.)
+        </div>
       </div>
-    </div>
-
-    <div class="hint">
-      <span id="counter">Attempts to press “No”: 0</span>
-      <span id="mood">My mood: 🥺</span>
-    </div>
-
-    <div class="tiny" id="tiny">
-      P.S. If you’re not ready right now, that’s okay — I only want a “yes” if you mean it. ❤️
-    </div>
-
-    <div class="footer">
-      <span>Made with excessive love & a tiny bit of chaos.</span>
-      <a class="link" href="#" id="resetLink">Reset</a>
     </div>
   </div>
 
@@ -270,59 +429,52 @@
 
   <div class="overlay" id="overlay">
     <div class="modal">
-      <div style="font-size:38px">💘</div>
-      <h2 id="finalTitle">I choose you. Always.</h2>
+      <div class="modalTop">
+        <div style="font-size:18px;font-weight:900;">💘</div>
+        <button class="close" id="closeOverlay" aria-label="Close">✕</button>
+      </div>
+
+      <h2 id="finalTitle">One last thing…</h2>
       <p id="finalText">
-        I’ve been building up the courage to ask you this in a cute way…
-        Would you make me the happiest person and be my Valentine?
-        <br/><br/>
-        <b>No tricks now:</b> I only want a yes if it’s a real yes.
+        I made this just for you. And I’m asking with my whole heart:
+        will you be my Valentine?
       </p>
+
+      <div class="ringStage">
+        <div class="ringGlow" id="ringGlow"></div>
+        <div class="ring" id="ring"></div>
+      </div>
+
       <div class="row">
         <button class="yes" id="finalYes">YES 💖</button>
-        <button class="soft" id="finalLater">Not now (hug me first)</button>
       </div>
-      <p style="margin-top:14px; font-size:12px; opacity:.72">
-        (If you tap “Not now”, I’ll stop the teasing and we’ll come back later.)
-      </p>
     </div>
   </div>
 
+  <div class="toast" id="toast">Nice try 😌 It remembers.</div>
+
 <script>
-  // ---- Personalize these quickly ----
-  const HER_NAME = ""; // e.g. "Priya"
+  // ======================
+  //  PERSONALIZE ME FAST
+  // ======================
+  const HER_NAME  = ""; // e.g. "Priya"
   const FROM_NAME = ""; // e.g. "Akash"
 
-  const noLabels = [
-    "No 🙈",
-    "Not today 😅",
-    "Maybe… 😳",
-    "I’m shy 🫣",
-    "Ask me nicer 😤",
-    "I refuse (lovingly) 😈",
-    "Hmm… 👀",
-    "Try again 😌",
-    "Nope 😂",
-    "I said no… (did I?) 🤭",
-    "Ok stop 😭",
-    "This is suspicious 🕵️‍♀️",
+  // Add 3–8 photos to /photos/ and list them here
+  const SLIDES = [
+    { src: "photos/1.jpg", caption: "Us, being us 🥹" },
+    { src: "photos/2.jpg", caption: "My favorite place is next to you 💞" },
+    { src: "photos/3.jpg", caption: "Proof we look good together 😌" },
+    { src: "photos/4.jpg", caption: "Okay now say YES please 😭💖" },
   ];
 
-  const teaseLines = [
-    "The “No” button is practicing social distancing.",
-    "Plot twist: the “No” button has stage fright.",
-    "Your finger almost caught it. ALMOST.",
-    "I trained it with cardio. 🏃‍♀️💨",
-    "It’s not you… it’s my UI being dramatic.",
-    "Okay okay—what if you click YES just to see what happens?",
-    "If you choose NO, my heart will buffer… 🥺",
-    "This app was made with love and mild mischief.",
-    "The No button has entered stealth mode.",
-    "I promise the YES route is adorable.",
-  ];
+  // Add your own MP3 in repo and set MUSIC_SRC to it, e.g. "music/song.mp3"
+  // If you don't add a file, it'll just stay silent.
+  const MUSIC_SRC = ""; // e.g. "music/love.mp3"
 
-  const moods = ["🥺","😟","😩","😭","🫠","😤","😳","🤭","😇","💘"];
-
+  // ======================
+  //  STATE + ELEMENTS
+  // ======================
   const stage = document.getElementById("stage");
   const yesBtn = document.getElementById("yesBtn");
   const noBtn = document.getElementById("noBtn");
@@ -331,29 +483,114 @@
   const mood = document.getElementById("mood");
   const overlay = document.getElementById("overlay");
   const finalYes = document.getElementById("finalYes");
-  const finalLater = document.getElementById("finalLater");
+  const closeOverlay = document.getElementById("closeOverlay");
   const confetti = document.getElementById("confetti");
   const resetLink = document.getElementById("resetLink");
   const title = document.getElementById("title");
   const subtitle = document.getElementById("subtitle");
   const finalTitle = document.getElementById("finalTitle");
   const finalText = document.getElementById("finalText");
+  const badgeText = document.getElementById("badgeText");
+  const ring = document.getElementById("ring");
+  const ringGlow = document.getElementById("ringGlow");
+  const toast = document.getElementById("toast");
 
-  let noAttempts = 0;
-  let noIndex = 0;
+  // slideshow
+  const imgA = document.getElementById("p1");
+  const imgB = document.getElementById("p2");
+  const caption = document.getElementById("caption");
+  const slideMeta = document.getElementById("slideMeta");
+
+  // music
+  const audioPill = document.getElementById("audioPill");
+  const audioIcon = document.getElementById("audioIcon");
+  const audioLabel = document.getElementById("audioLabel");
+  const audioSmall = document.getElementById("audioSmall");
+  let audio = null;
+  let musicOn = false;
+
+  // “NO” teasing
+  const noLabels = [
+    "No 🙈","Nope 😅","Not today 😳","I’m shy 🫣","Try again 😌",
+    "Absolutely not 😂","Maybe… 👀","No (for now) 🤭","No x2 😈","No x3 😭"
+  ];
+  const teaseLines = [
+    "The NO button has cardio today.",
+    "Plot twist: it’s allergic to being clicked.",
+    "Almost caught it… ALMOST.",
+    "It’s doing parkour. 🏃‍♀️💨",
+    "It says: ‘not me, not today.’",
+    "It’s shy. Like, clinically shy.",
+    "Meanwhile YES is just sitting there… loyal.",
+    "It entered stealth mode.",
+    "It’s practicing evasive maneuvers.",
+    "Okay okay—try YES once. Just to test 😌",
+  ];
+  const moods = ["🥺","😟","😩","😭","🫠","😤","😳","🤭","😇","💘"];
+
+  // persistence (“remembers” on refresh)
+  const KEY = "valentine_app_state_v1";
+  let state = loadState() ?? {
+    noAttempts: 0,
+    noIndex: 0,
+    slideIndex: 0,
+    hasSeenToast: false
+  };
 
   function rand(min, max){ return Math.floor(Math.random()*(max-min+1))+min; }
 
+  // ======================
+  //  MUSIC (user gesture)
+  // ======================
+  function setupAudio(){
+    if (!MUSIC_SRC) return;
+    audio = new Audio(MUSIC_SRC);
+    audio.loop = true;
+    audio.volume = 0.85;
+  }
+
+  async function toggleMusic(){
+    if (!audio) {
+      // If no file provided, just show message
+      showToast("Add an MP3 and set MUSIC_SRC 😊");
+      return;
+    }
+    try{
+      if (!musicOn){
+        await audio.play();
+        musicOn = true;
+        audioPill.classList.remove("off");
+        audioIcon.textContent = "🔊";
+        audioLabel.textContent = "Music";
+        audioSmall.textContent = "on";
+      } else {
+        audio.pause();
+        musicOn = false;
+        audioPill.classList.add("off");
+        audioIcon.textContent = "🔇";
+        audioLabel.textContent = "Music";
+        audioSmall.textContent = "(tap)";
+      }
+    }catch(e){
+      showToast("Tap again to allow audio 🎵");
+    }
+  }
+
+  audioPill.addEventListener("click", toggleMusic);
+  audioPill.addEventListener("touchstart", (e)=>{ e.preventDefault(); toggleMusic(); }, {passive:false});
+
+  // ======================
+  //  BUTTON PLACEMENT
+  // ======================
   function placeInitialButtons(){
-    // place YES bottom-left-ish; NO bottom-right-ish
     const rect = stage.getBoundingClientRect();
     const pad = 14;
 
     yesBtn.style.left = pad + "px";
-    yesBtn.style.top  = (rect.height - 80) + "px";
+    yesBtn.style.top  = (rect.height - 84) + "px";
 
-    noBtn.style.left  = (rect.width - 120) + "px";
-    noBtn.style.top   = (rect.height - 76) + "px";
+    noBtn.style.left  = (rect.width - 128) + "px";
+    noBtn.style.top   = (rect.height - 80) + "px";
   }
 
   function moveNoButton(){
@@ -364,18 +601,17 @@
     const maxY = rect.height - btnRect.height - 14;
 
     const x = rand(14, Math.max(14, maxX));
-    const y = rand(60, Math.max(60, maxY)); // keep away from bubble a bit
+    const y = rand(64, Math.max(64, maxY)); // keep away from bubble
 
     noBtn.style.left = x + "px";
     noBtn.style.top  = y + "px";
-    noBtn.style.transform = `rotate(${rand(-8, 8)}deg)`;
+    noBtn.style.transform = `rotate(${rand(-10, 10)}deg)`;
   }
 
   function growYesButton(){
-    // Increase YES size slightly each time
-    const scale = Math.min(1 + noAttempts * 0.08, 1.9);
+    const scale = Math.min(1 + state.noAttempts * 0.08, 1.75);
     yesBtn.style.transform = `scale(${scale})`;
-    yesBtn.style.filter = `brightness(${1 + Math.min(noAttempts*0.03, 0.25)})`;
+    yesBtn.style.filter = `brightness(${1 + Math.min(state.noAttempts*0.03, 0.25)})`;
   }
 
   function updateTease(){
@@ -384,136 +620,228 @@
   }
 
   function updateUI(){
-    counter.textContent = `Attempts to press “No”: ${noAttempts}`;
-    mood.textContent = `My mood: ${moods[Math.min(noAttempts, moods.length-1)]}`;
-    noBtn.textContent = noLabels[noIndex % noLabels.length];
-    noIndex++;
+    counter.textContent = `No attempts: ${state.noAttempts}`;
+    mood.textContent = `Mood: ${moods[Math.min(state.noAttempts, moods.length-1)]}`;
+    noBtn.textContent = noLabels[state.noIndex % noLabels.length];
+    state.noIndex++;
+    saveState();
   }
 
+  // ======================
+  //  CONFETTI
+  // ======================
   function popConfetti(){
     confetti.innerHTML = "";
-    const pieces = 110;
+    const pieces = 120;
     for(let i=0;i<pieces;i++){
       const p = document.createElement("div");
       p.className = "piece";
       p.style.left = rand(0, 100) + "vw";
       p.style.top = rand(-30, -5) + "vh";
       p.style.background = `hsl(${rand(330, 30)}, ${rand(70,95)}%, ${rand(55,70)}%)`;
-      p.style.transform = `rotate(${rand(0,360)}deg)`;
       p.style.animationDuration = (Math.random()*0.9 + 1.1) + "s";
       p.style.width = rand(7, 12) + "px";
       p.style.height = rand(9, 16) + "px";
       confetti.appendChild(p);
     }
-    setTimeout(()=> confetti.innerHTML="", 1900);
+    setTimeout(()=> confetti.innerHTML="", 2000);
   }
 
+  // ======================
+  //  OVERLAY + RING
+  // ======================
   function openFinal(){
     overlay.style.display = "flex";
+    // ring reveal animation
+    ring.classList.remove("show");
+    ringGlow.classList.remove("show");
+    requestAnimationFrame(()=>{
+      ring.classList.add("show");
+      ringGlow.classList.add("show");
+    });
   }
   function closeFinal(){
     overlay.style.display = "none";
   }
+  closeOverlay.addEventListener("click", closeFinal);
 
-  // “NO” interaction: dodgy + playful + escalates to a respectful final prompt
+  // ======================
+  //  NO interaction (playful)
+  // ======================
   function onNoTry(){
-    noAttempts++;
+    state.noAttempts++;
     updateUI();
     updateTease();
     moveNoButton();
     growYesButton();
 
-    // At some point, switch to a respectful final screen
-    if(noAttempts === 6){
-      title.textContent = `Okay okay… I get it 😅`;
-      subtitle.textContent = `No more chasing. Just one honest question.`;
-      finalTitle.textContent = HER_NAME ? `${HER_NAME}… my heart says this:` : `My heart says this:`;
+    // after a few tries, show the final “one last thing…” screen (still only completes with YES)
+    if (state.noAttempts === 6) {
+      title.textContent = "Okay… dramatic pause 😌";
+      subtitle.textContent = "Now the official question (with maximum romance).";
+
+      finalTitle.textContent = HER_NAME ? `${HER_NAME}…` : "Hey you…";
       finalText.innerHTML = `
-        I made this because I love you — a lot. 🥹<br/><br/>
-        Will you be my Valentine?
+        I made this just for you. <br/>
+        And I have one question:
         <br/><br/>
-        <b>No tricks now:</b> I only want a “yes” if you truly mean it.
+        <b>Will you be my Valentine?</b>
         ${FROM_NAME ? `<br/><br/>— ${FROM_NAME} ❤️` : ``}
       `;
       openFinal();
     }
+    saveState();
   }
 
-  // Make the NO button dodge when hovered/touched
+  // dodge on hover (desktop)
   noBtn.addEventListener("mouseenter", onNoTry);
+  // dodge on touch (mobile)
+  noBtn.addEventListener("touchstart", (e) => { e.preventDefault(); onNoTry(); }, {passive:false});
 
-  // On mobile, make it dodge on touchstart
-  noBtn.addEventListener("touchstart", (e) => {
-    e.preventDefault();
-    onNoTry();
-  }, {passive:false});
-
-  yesBtn.addEventListener("click", () => {
+  // ======================
+  //  YES flow
+  // ======================
+  function yesFlow(){
     popConfetti();
     title.textContent = "YAAAAAY 💖";
     subtitle.textContent = "You just made my entire universe happier.";
+
     bubbleText.innerHTML = `
       <b>YES?!</b> 😭💘<br/>
       <small>
-        Congratulations, you are now officially my Valentine.<br/>
-        (Rewards: kisses, snacks, and unlimited “I love you”s.)
+        You are officially my Valentine.<br/>
+        Rewards: kisses, snacks, and unlimited “I love you”s.
       </small>
     `;
-    // bring up final as a nice “seal the deal”
+
+    // final overlay becomes the “seal the deal” moment
     finalTitle.textContent = "Best. Answer. Ever.";
     finalText.innerHTML = `
       I love you. Thank you for being you. 💞<br/><br/>
-      <b>Valentine’s plan:</b> your favorite food + a sweet surprise + me being extra grateful.
+      Now come here… I owe you a celebration.
       ${FROM_NAME ? `<br/><br/>— ${FROM_NAME} ❤️` : ``}
     `;
     openFinal();
-  });
 
-  finalYes.addEventListener("click", () => {
-    closeFinal();
-    popConfetti();
-    yesBtn.click();
-  });
+    // persist completion
+    localStorage.setItem(KEY, JSON.stringify({...state, done:true}));
+  }
 
-  finalLater.addEventListener("click", () => {
-    // respectful exit: stop teasing, show a warm message
-    closeFinal();
-    title.textContent = "That’s okay ❤️";
-    subtitle.textContent = "No pressure. I love you either way.";
-    bubbleText.innerHTML = `
-      <b>Not now.</b> Thank you for being honest. 🫶<br/>
-      <small>
-        When you feel ready, tap <b>Reset</b>… or just hug me and we’ll talk.
-      </small>
-    `;
-    // Disable the dodging chaos after "Not now"
-    noBtn.style.display = "none";
-    yesBtn.textContent = "HUG 🤍";
-    yesBtn.onclick = () => {
-      popConfetti();
-      bubbleText.innerHTML = `<b>HUG RECEIVED.</b> 🥹💞<br/><small>Whenever you’re ready, I’m here.</small>`;
-    };
-  });
+  yesBtn.addEventListener("click", yesFlow);
+  finalYes.addEventListener("click", () => { closeFinal(); yesFlow(); });
 
+  // ======================
+  //  RESET
+  // ======================
   resetLink.addEventListener("click", (e) => {
     e.preventDefault();
-    noAttempts = 0;
-    noIndex = 0;
+    state = { noAttempts: 0, noIndex: 0, slideIndex: 0, hasSeenToast: true };
+    localStorage.setItem(KEY, JSON.stringify(state));
     title.textContent = "Hey love… I have a tiny question 💌";
-    subtitle.textContent = "Answer honestly. (But I may be a little dramatic.)";
-    bubbleText.innerHTML = `Will you be my Valentine? <br/><small>(Warning: the <b>NO</b> button is… shy.)</small>`;
-    counter.textContent = `Attempts to press “No”: 0`;
-    mood.textContent = `My mood: 🥺`;
-    noBtn.style.display = "block";
+    subtitle.textContent = "No speeches. Just vibes. And one button that behaves suspiciously.";
+    bubbleText.innerHTML = `Will you be my Valentine? <br/><small>(The <b>NO</b> button is… athletic.)</small>`;
     yesBtn.textContent = "YES 💖";
     yesBtn.style.transform = "scale(1)";
     yesBtn.style.filter = "none";
-    yesBtn.onclick = null;
+    noBtn.textContent = "No 🙈";
+    noBtn.style.transform = "none";
     placeInitialButtons();
+    setSlide(0, true);
+    updateUI();
   });
 
+  // ======================
+  //  SLIDESHOW
+  // ======================
+  let showingA = true;
+
+  function setSlide(i, instant=false){
+    if (!SLIDES.length) return;
+    state.slideIndex = (i + SLIDES.length) % SLIDES.length;
+    const s = SLIDES[state.slideIndex];
+
+    slideMeta.textContent = `${state.slideIndex + 1} / ${SLIDES.length}`;
+    caption.textContent = s.caption || "";
+
+    const showImg = showingA ? imgA : imgB;
+    const hideImg = showingA ? imgB : imgA;
+
+    showImg.src = s.src;
+    showImg.onload = () => {
+      hideImg.classList.remove("show");
+      if (instant){
+        showImg.style.transition = "none";
+        showImg.classList.add("show");
+        // re-enable transitions
+        requestAnimationFrame(()=> showImg.style.transition = "");
+      } else {
+        showImg.classList.add("show");
+      }
+    };
+    showingA = !showingA;
+    saveState();
+  }
+
+  function startSlideshow(){
+    setSlide(state.slideIndex, true);
+    setInterval(()=> setSlide(state.slideIndex + 1), 4200);
+  }
+
+  // ======================
+  //  “REMEMBERS” EASTER EGG
+  // ======================
+  function loadState(){
+    try{
+      const raw = localStorage.getItem(KEY);
+      if (!raw) return null;
+      return JSON.parse(raw);
+    }catch{ return null; }
+  }
+  function saveState(){
+    try{
+      localStorage.setItem(KEY, JSON.stringify(state));
+    }catch{}
+  }
+  function showToast(msg){
+    toast.textContent = msg;
+    toast.classList.add("show");
+    setTimeout(()=> toast.classList.remove("show"), 1600);
+  }
+
+  // show a one-time “it remembers” toast if she refreshes mid-game
+  (function easterEgg(){
+    const nav = performance.getEntriesByType?.("navigation")?.[0];
+    const refreshed = nav && nav.type === "reload";
+    if (refreshed && !state.hasSeenToast){
+      showToast("Nice try 😌 It remembers.");
+      state.hasSeenToast = true;
+      saveState();
+    }
+  })();
+
+  // ======================
+  //  INIT
+  // ======================
   window.addEventListener("resize", placeInitialButtons);
   placeInitialButtons();
+  updateUI();
+  setupAudio();
+  startSlideshow();
+
+  // tiny personalization on badge/title
+  if (HER_NAME){
+    badgeText.textContent = `Valentine Mode: ON for ${HER_NAME} 💘`;
+  }
 </script>
+
+<script>
+  // Service worker registration (PWA offline-ish)
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js').catch(()=>{});
+    });
+  }
+</script>
+
 </body>
 </html>
