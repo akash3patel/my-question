@@ -565,62 +565,64 @@
   function rand(min, max){ return Math.floor(Math.random()*(max-min+1))+min; }
 
   // ======================
-  // MUSIC (user gesture)
+  // MUSIC (user gesture) - reliable
   // ======================
   function setupAudio(){
     if (!MUSIC_SRC) return;
     audio = new Audio(MUSIC_SRC);
     audio.loop = true;
+    audio.preload = "auto";
     audio.volume = 0.85;
   }
-
-  // fallback: cute beeps if no MP3
-  let beepCtx = null;
-  function beep(freq=660, dur=0.09){
+  
+  async function startMusicFromGesture(){
+    if (!audio) return;
+  
+    // iOS Safari sometimes needs a "load" after a gesture
+    try { audio.load(); } catch {}
+  
     try{
-      beepCtx = beepCtx || new (window.AudioContext || window.webkitAudioContext)();
-      const o = beepCtx.createOscillator();
-      const g = beepCtx.createGain();
-      o.type = "sine";
-      o.frequency.value = freq;
-      g.gain.value = 0.04;
-      o.connect(g); g.connect(beepCtx.destination);
-      o.start();
-      setTimeout(()=>{ o.stop(); }, dur*1000);
-    }catch{}
-  }
-
-  async function toggleMusic(){
-    if (audio){
-      try{
-        if (!musicOn){
-          await audio.play();
-          musicOn = true;
-          audioPill.classList.remove("off");
-          audioIcon.textContent = "🔊";
-          audioSmall.textContent = "on";
-        } else {
-          audio.pause();
-          musicOn = false;
-          audioPill.classList.add("off");
-          audioIcon.textContent = "🔇";
-          audioSmall.textContent = "(tap)";
-        }
-      }catch{
-        showToast("Tap again to allow audio 🎵");
-      }
-    } else {
-      // no mp3: just do a cute “enabled” indicator + little beeps on actions
-      musicOn = !musicOn;
-      audioPill.classList.toggle("off", !musicOn);
-      audioIcon.textContent = musicOn ? "🔊" : "🔇";
-      audioSmall.textContent = musicOn ? "on" : "(tap)";
-      showToast(musicOn ? "Cute sounds: ON ✨" : "Cute sounds: OFF");
-      if (musicOn) beep(740, 0.10);
+      await audio.play();
+      musicOn = true;
+      audioPill.classList.remove("off");
+      audioIcon.textContent = "🔊";
+      audioSmall.textContent = "on";
+    }catch(e){
+      showToast("Tap once more to allow music 🎵");
     }
   }
+  
+  function stopMusic(){
+    if (!audio) return;
+    audio.pause();
+    audio.currentTime = 0;
+    musicOn = false;
+    audioPill.classList.add("off");
+    audioIcon.textContent = "🔇";
+    audioSmall.textContent = "(tap)";
+  }
+  
+  async function toggleMusic(){
+    if (!audio){
+      showToast("Add an MP3 + set MUSIC_SRC 😊");
+      return;
+    }
+    if (!musicOn) await startMusicFromGesture();
+    else stopMusic();
+  }
+  
+  // Button toggles music
   audioPill.addEventListener("click", toggleMusic);
   audioPill.addEventListener("touchstart", (e)=>{ e.preventDefault(); toggleMusic(); }, {passive:false});
+  
+  // Bonus: first tap anywhere can start music (super reliable)
+  function oneTimeStart(){
+    if (!musicOn && audio) startMusicFromGesture();
+    document.removeEventListener("click", oneTimeStart);
+    document.removeEventListener("touchstart", oneTimeStart);
+  }
+  document.addEventListener("click", oneTimeStart, {once:true});
+  document.addEventListener("touchstart", oneTimeStart, {once:true, passive:false});
 
   // ======================
   // BUTTONS
