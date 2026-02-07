@@ -40,7 +40,7 @@
     @keyframes floaty{ from{transform:translateY(-6px)} to{transform:translateY(10px)} }
 
     .card{
-      width:min(820px, 92vw);
+      width:min(860px, 94vw);
       padding:22px 22px 16px;
       border-radius:28px;
       background:var(--card);
@@ -58,7 +58,7 @@
       padding:10px 14px; border-radius:999px;
       background: rgba(255,255,255,.8);
       border:1px solid rgba(0,0,0,.06);
-      font-weight:700; letter-spacing:.2px;
+      font-weight:800; letter-spacing:.2px;
     }
     .badge .dot{
       width:10px; height:10px; border-radius:999px;
@@ -71,17 +71,17 @@
       padding:10px 12px; border-radius:999px;
       border:1px solid rgba(0,0,0,.07);
       background: rgba(255,255,255,.78);
-      font-weight:800;
+      font-weight:900;
       cursor:pointer;
       user-select:none;
       -webkit-tap-highlight-color: transparent;
     }
-    .audioPill small{opacity:.65; font-weight:700}
+    .audioPill small{opacity:.65; font-weight:800}
     .audioPill .icon{font-size:16px}
-    .audioPill.off{opacity:.75}
+    .audioPill.off{opacity:.78}
     .audioPill:active{transform:scale(.99)}
 
-    h1{ margin:14px 0 6px; font-size: clamp(28px, 4.6vw, 44px); line-height:1.05; }
+    h1{ margin:14px 0 6px; font-size: clamp(28px, 4.6vw, 46px); line-height:1.05; }
     .sub{ margin:0 0 14px; font-size: clamp(14px, 2.4vw, 18px); opacity:.82; }
 
     .grid{
@@ -89,13 +89,13 @@
       grid-template-columns: 1.15fr .85fr;
       gap:14px;
     }
-    @media (max-width: 760px){
+    @media (max-width: 780px){
       .grid{ grid-template-columns: 1fr; }
     }
 
     .stage{
       position:relative;
-      height:260px;
+      height:270px;
       border-radius:22px;
       border:1px dashed rgba(0,0,0,.10);
       background: rgba(255,255,255,.55);
@@ -147,7 +147,7 @@
       background: rgba(255,255,255,.62);
       border:1px solid rgba(0,0,0,.07);
       overflow:hidden;
-      min-height:260px;
+      min-height:270px;
       display:flex;
       flex-direction:column;
     }
@@ -162,31 +162,72 @@
       letter-spacing:.2px;
     }
     .panelHeader .meta{
-      font-size:12px; opacity:.7; font-weight:700;
+      font-size:12px; opacity:.7; font-weight:800;
     }
-    .photoWrap{
-      position:relative;
+
+    /* “no-photos” slideshow cards */
+    .memoryWrap{
       flex:1;
-      min-height:190px;
+      padding:12px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background: linear-gradient(135deg, rgba(255,255,255,.9), rgba(255,245,250,.9));
+      position:relative;
+      overflow:hidden;
+    }
+    .memoryCard{
+      width:100%;
+      border-radius:20px;
+      border:1px solid rgba(0,0,0,.07);
       background:#fff;
-    }
-    .photo{
-      position:absolute; inset:0;
-      width:100%; height:100%;
-      object-fit:cover;
+      box-shadow: 0 14px 30px rgba(0,0,0,.08);
+      padding:16px 14px;
+      position:absolute;
       opacity:0;
-      transform: scale(1.02);
-      transition: opacity .6s ease, transform 1.2s ease;
+      transform: translateY(10px) scale(.98);
+      transition: opacity .5s ease, transform .8s ease;
     }
-    .photo.show{
+    .memoryCard.show{
       opacity:1;
-      transform: scale(1);
+      transform: translateY(0) scale(1);
     }
-    .caption{
-      padding:10px 12px 12px;
-      font-size:13px;
-      opacity:.85;
-      line-height:1.35;
+    .memoryTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:10px;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:7px 10px;
+      border-radius:999px;
+      background: rgba(255,59,123,.10);
+      border:1px solid rgba(255,59,123,.20);
+      font-weight:900;
+      font-size:12px;
+    }
+    .emojiBig{
+      font-size:44px;
+      filter: drop-shadow(0 10px 14px rgba(0,0,0,.10));
+    }
+    .memoryText{
+      font-size:14px;
+      opacity:.88;
+      line-height:1.45;
+      font-weight:700;
+    }
+    .memoryFooter{
+      margin-top:12px;
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      font-size:12px;
+      opacity:.7;
+      font-weight:800;
     }
 
     .hint{
@@ -207,7 +248,7 @@
     .link{
       text-decoration:none;
       color:#ff2f75;
-      font-weight:800;
+      font-weight:900;
       cursor:pointer;
     }
 
@@ -261,6 +302,7 @@
       opacity:.88;
       line-height:1.45;
       text-align:center;
+      font-weight:700;
     }
     .modal .row{
       display:flex;
@@ -317,14 +359,8 @@
       opacity:0;
       transform: scale(.9);
     }
-    .ring.show{
-      opacity:1;
-      animation: ringPop .9s cubic-bezier(.2,.9,.2,1) forwards;
-    }
-    .ringGlow.show{
-      opacity:1;
-      animation: glow 1.3s ease-out forwards;
-    }
+    .ring.show{ opacity:1; animation: ringPop .9s cubic-bezier(.2,.9,.2,1) forwards; }
+    .ringGlow.show{ opacity:1; animation: glow 1.3s ease-out forwards; }
     @keyframes ringPop{
       0%{ transform: translateY(40px) scale(.6) rotate(-8deg); }
       60%{ transform: translateY(-4px) scale(1.05) rotate(6deg); }
@@ -346,7 +382,7 @@
       padding:10px 12px;
       border-radius:14px;
       font-size:13px;
-      font-weight:800;
+      font-weight:900;
       opacity:0;
       pointer-events:none;
       transition: opacity .2s ease, transform .2s ease;
@@ -358,6 +394,7 @@
     }
   </style>
 </head>
+
 <body>
   <div class="hearts"></div>
 
@@ -365,7 +402,6 @@
     <div class="toprow">
       <div class="badge"><span class="dot"></span><span id="badgeText">Valentine Mode: ON</span></div>
 
-      <!-- Music must be user-started on most phones, so this is the “tap to play” control -->
       <div class="audioPill off" id="audioPill" title="Tap to play music">
         <span class="icon" id="audioIcon">🔇</span>
         <span id="audioLabel">Music</span>
@@ -374,20 +410,20 @@
     </div>
 
     <h1 id="title">Hey love… I have a tiny question 💌</h1>
-    <p class="sub" id="subtitle">No speeches. Just vibes. And one button that behaves suspiciously.</p>
+    <p class="sub" id="subtitle">No speeches. Just vibes. And one button that refuses to be clicked.</p>
 
     <div class="grid">
-      <!-- LEFT: interactive stage -->
+      <!-- LEFT -->
       <div>
         <div class="stage" id="stage">
-          <div class="bubble" id="bubble">
+          <div class="bubble">
             <span id="bubbleText">
               Will you be my Valentine? <br/>
-              <small>(The <b>NO</b> button is… athletic.)</small>
+              <small>(The <b>NO</b> button is… doing cardio.)</small>
             </span>
           </div>
 
-          <div class="buttons" id="buttons">
+          <div class="buttons">
             <button class="yes" id="yesBtn">YES 💖</button>
             <button class="no" id="noBtn">No 🙈</button>
           </div>
@@ -398,9 +434,7 @@
           <span id="mood">Mood: 🥺</span>
         </div>
 
-        <div class="tiny" id="tiny">
-          Tip: the YES button never runs. It’s loyal.
-        </div>
+        <div class="tiny">Tip: the YES button never runs. It’s loyal.</div>
 
         <div class="footer">
           <span>Made with love + a tiny bit of chaos.</span>
@@ -408,18 +442,16 @@
         </div>
       </div>
 
-      <!-- RIGHT: slideshow -->
+      <!-- RIGHT -->
       <div class="panel">
         <div class="panelHeader">
-          <div class="title">Our moments ✨</div>
-          <div class="meta" id="slideMeta">1 / 4</div>
+          <div class="title">Tiny love moments ✨</div>
+          <div class="meta" id="slideMeta">1 / 6</div>
         </div>
-        <div class="photoWrap">
-          <img class="photo" id="p1" alt="photo 1">
-          <img class="photo" id="p2" alt="photo 2">
-        </div>
-        <div class="caption" id="caption">
-          (Add your photos in <b>/photos</b> — edit captions in the code.)
+
+        <div class="memoryWrap" id="memoryWrap">
+          <div class="memoryCard" id="mA"></div>
+          <div class="memoryCard" id="mB"></div>
         </div>
       </div>
     </div>
@@ -435,10 +467,7 @@
       </div>
 
       <h2 id="finalTitle">One last thing…</h2>
-      <p id="finalText">
-        I made this just for you. And I’m asking with my whole heart:
-        will you be my Valentine?
-      </p>
+      <p id="finalText">I made this just for you. Will you be my Valentine?</p>
 
       <div class="ringStage">
         <div class="ringGlow" id="ringGlow"></div>
@@ -455,25 +484,26 @@
 
 <script>
   // ======================
-  //  PERSONALIZE ME FAST
+  // PERSONALIZE (optional)
   // ======================
   const HER_NAME  = ""; // e.g. "Priya"
   const FROM_NAME = ""; // e.g. "Akash"
 
-  // Add 3–8 photos to /photos/ and list them here
-  const SLIDES = [
-    { src: "photos/1.jpg", caption: "Us, being us 🥹" },
-    { src: "photos/2.jpg", caption: "My favorite place is next to you 💞" },
-    { src: "photos/3.jpg", caption: "Proof we look good together 😌" },
-    { src: "photos/4.jpg", caption: "Okay now say YES please 😭💖" },
-  ];
-
-  // Add your own MP3 in repo and set MUSIC_SRC to it, e.g. "music/song.mp3"
-  // If you don't add a file, it'll just stay silent.
+  // Optional: add your own MP3 file (e.g., /music/love.mp3) and set this:
   const MUSIC_SRC = ""; // e.g. "music/love.mp3"
 
+  // Built-in “no-photo” slideshow
+  const MEMORIES = [
+    { tag:"Fact", emoji:"💖", text:"I’m not asking the internet. I’m asking my favorite person." },
+    { tag:"Cute", emoji:"🥹", text:"If loving you was a job… I’d be employee of the year. Every year." },
+    { tag:"Truth", emoji:"😌", text:"The NO button runs because it knows it’s wrong." },
+    { tag:"Deal", emoji:"🍓", text:"Valentine’s perks include snacks, hugs, and me being extra annoying." },
+    { tag:"Plot", emoji:"🎬", text:"This is the part where you say YES and we both act surprised." },
+    { tag:"Final", emoji:"💍", text:"Okay… enough teasing. One question. One answer. YES? 💘" },
+  ];
+
   // ======================
-  //  STATE + ELEMENTS
+  // STATE + ELEMENTS
   // ======================
   const stage = document.getElementById("stage");
   const yesBtn = document.getElementById("yesBtn");
@@ -495,13 +525,13 @@
   const ringGlow = document.getElementById("ringGlow");
   const toast = document.getElementById("toast");
 
-  // slideshow
-  const imgA = document.getElementById("p1");
-  const imgB = document.getElementById("p2");
-  const caption = document.getElementById("caption");
+  // memory cards
+  const mA = document.getElementById("mA");
+  const mB = document.getElementById("mB");
   const slideMeta = document.getElementById("slideMeta");
+  let showingA = true;
 
-  // music
+  // music UI
   const audioPill = document.getElementById("audioPill");
   const audioIcon = document.getElementById("audioIcon");
   const audioLabel = document.getElementById("audioLabel");
@@ -509,7 +539,7 @@
   let audio = null;
   let musicOn = false;
 
-  // “NO” teasing
+  // teasing
   const noLabels = [
     "No 🙈","Nope 😅","Not today 😳","I’m shy 🫣","Try again 😌",
     "Absolutely not 😂","Maybe… 👀","No (for now) 🤭","No x2 😈","No x3 😭"
@@ -520,27 +550,22 @@
     "Almost caught it… ALMOST.",
     "It’s doing parkour. 🏃‍♀️💨",
     "It says: ‘not me, not today.’",
-    "It’s shy. Like, clinically shy.",
-    "Meanwhile YES is just sitting there… loyal.",
     "It entered stealth mode.",
+    "Meanwhile YES is just sitting there… loyal.",
     "It’s practicing evasive maneuvers.",
     "Okay okay—try YES once. Just to test 😌",
+    "I swear YES is the only stable option 😂",
   ];
   const moods = ["🥺","😟","😩","😭","🫠","😤","😳","🤭","😇","💘"];
 
-  // persistence (“remembers” on refresh)
-  const KEY = "valentine_app_state_v1";
-  let state = loadState() ?? {
-    noAttempts: 0,
-    noIndex: 0,
-    slideIndex: 0,
-    hasSeenToast: false
-  };
+  // “remembers” on refresh
+  const KEY = "valentine_app_state_v2";
+  let state = loadState() ?? { noAttempts: 0, noIndex: 0, memIndex: 0, hasSeenToast: false, done:false };
 
   function rand(min, max){ return Math.floor(Math.random()*(max-min+1))+min; }
 
   // ======================
-  //  MUSIC (user gesture)
+  // MUSIC (user gesture)
   // ======================
   function setupAudio(){
     if (!MUSIC_SRC) return;
@@ -549,67 +574,80 @@
     audio.volume = 0.85;
   }
 
-  async function toggleMusic(){
-    if (!audio) {
-      // If no file provided, just show message
-      showToast("Add an MP3 and set MUSIC_SRC 😊");
-      return;
-    }
+  // fallback: cute beeps if no MP3
+  let beepCtx = null;
+  function beep(freq=660, dur=0.09){
     try{
-      if (!musicOn){
-        await audio.play();
-        musicOn = true;
-        audioPill.classList.remove("off");
-        audioIcon.textContent = "🔊";
-        audioLabel.textContent = "Music";
-        audioSmall.textContent = "on";
-      } else {
-        audio.pause();
-        musicOn = false;
-        audioPill.classList.add("off");
-        audioIcon.textContent = "🔇";
-        audioLabel.textContent = "Music";
-        audioSmall.textContent = "(tap)";
-      }
-    }catch(e){
-      showToast("Tap again to allow audio 🎵");
-    }
+      beepCtx = beepCtx || new (window.AudioContext || window.webkitAudioContext)();
+      const o = beepCtx.createOscillator();
+      const g = beepCtx.createGain();
+      o.type = "sine";
+      o.frequency.value = freq;
+      g.gain.value = 0.04;
+      o.connect(g); g.connect(beepCtx.destination);
+      o.start();
+      setTimeout(()=>{ o.stop(); }, dur*1000);
+    }catch{}
   }
 
+  async function toggleMusic(){
+    if (audio){
+      try{
+        if (!musicOn){
+          await audio.play();
+          musicOn = true;
+          audioPill.classList.remove("off");
+          audioIcon.textContent = "🔊";
+          audioSmall.textContent = "on";
+        } else {
+          audio.pause();
+          musicOn = false;
+          audioPill.classList.add("off");
+          audioIcon.textContent = "🔇";
+          audioSmall.textContent = "(tap)";
+        }
+      }catch{
+        showToast("Tap again to allow audio 🎵");
+      }
+    } else {
+      // no mp3: just do a cute “enabled” indicator + little beeps on actions
+      musicOn = !musicOn;
+      audioPill.classList.toggle("off", !musicOn);
+      audioIcon.textContent = musicOn ? "🔊" : "🔇";
+      audioSmall.textContent = musicOn ? "on" : "(tap)";
+      showToast(musicOn ? "Cute sounds: ON ✨" : "Cute sounds: OFF");
+      if (musicOn) beep(740, 0.10);
+    }
+  }
   audioPill.addEventListener("click", toggleMusic);
   audioPill.addEventListener("touchstart", (e)=>{ e.preventDefault(); toggleMusic(); }, {passive:false});
 
   // ======================
-  //  BUTTON PLACEMENT
+  // BUTTONS
   // ======================
   function placeInitialButtons(){
     const rect = stage.getBoundingClientRect();
     const pad = 14;
-
     yesBtn.style.left = pad + "px";
-    yesBtn.style.top  = (rect.height - 84) + "px";
-
+    yesBtn.style.top  = (rect.height - 86) + "px";
     noBtn.style.left  = (rect.width - 128) + "px";
-    noBtn.style.top   = (rect.height - 80) + "px";
+    noBtn.style.top   = (rect.height - 82) + "px";
   }
 
   function moveNoButton(){
     const rect = stage.getBoundingClientRect();
     const btnRect = noBtn.getBoundingClientRect();
-
     const maxX = rect.width - btnRect.width - 14;
     const maxY = rect.height - btnRect.height - 14;
-
     const x = rand(14, Math.max(14, maxX));
-    const y = rand(64, Math.max(64, maxY)); // keep away from bubble
-
+    const y = rand(64, Math.max(64, maxY));
     noBtn.style.left = x + "px";
     noBtn.style.top  = y + "px";
     noBtn.style.transform = `rotate(${rand(-10, 10)}deg)`;
   }
 
   function growYesButton(){
-    const scale = Math.min(1 + state.noAttempts * 0.08, 1.75);
+    const scale = Math.min(1 + state.noAttempts * 0.08, 1.8);
     yesBtn.style.transform = `scale(${scale})`;
     yesBtn.style.filter = `brightness(${1 + Math.min(state.noAttempts*0.03, 0.25)})`;
   }
@@ -627,8 +665,39 @@
     saveState();
   }
 
+  function onNoTry(){
+    if (state.done) return;
+    state.noAttempts++;
+    if (musicOn && !audio) beep(880, 0.07);
+
+    updateUI();
+    updateTease();
+    moveNoButton();
+    growYesButton();
+    nextMemory();
+
+    if (state.noAttempts === 6) {
+      title.textContent = "Okay… dramatic pause 😌";
+      subtitle.textContent = "Now the official question (with maximum romance).";
+      finalTitle.textContent = HER_NAME ? `${HER_NAME}…` : "Hey you…";
+      finalText.innerHTML = `
+        I made this just for you. <br/>
+        And I have one question:
+        <br/><br/>
+        <b>Will you be my Valentine?</b>
+        ${FROM_NAME ? `<br/><br/>— ${FROM_NAME} ❤️` : ``}
+      `;
+      openFinal();
+    }
+    saveState();
+  }
+
+  // dodge
+  noBtn.addEventListener("mouseenter", onNoTry);
+  noBtn.addEventListener("touchstart", (e) => { e.preventDefault(); onNoTry(); }, {passive:false});
+
   // ======================
-  //  CONFETTI
+  // CONFETTI
   // ======================
   function popConfetti(){
     confetti.innerHTML = "";
@@ -648,61 +717,31 @@
   }
 
   // ======================
-  //  OVERLAY + RING
+  // OVERLAY + RING
   // ======================
   function openFinal(){
     overlay.style.display = "flex";
-    // ring reveal animation
     ring.classList.remove("show");
     ringGlow.classList.remove("show");
     requestAnimationFrame(()=>{
       ring.classList.add("show");
       ringGlow.classList.add("show");
     });
+    if (musicOn && !audio) beep(660, 0.10);
   }
-  function closeFinal(){
-    overlay.style.display = "none";
-  }
+  function closeFinal(){ overlay.style.display = "none"; }
   closeOverlay.addEventListener("click", closeFinal);
 
   // ======================
-  //  NO interaction (playful)
-  // ======================
-  function onNoTry(){
-    state.noAttempts++;
-    updateUI();
-    updateTease();
-    moveNoButton();
-    growYesButton();
-
-    // after a few tries, show the final “one last thing…” screen (still only completes with YES)
-    if (state.noAttempts === 6) {
-      title.textContent = "Okay… dramatic pause 😌";
-      subtitle.textContent = "Now the official question (with maximum romance).";
-
-      finalTitle.textContent = HER_NAME ? `${HER_NAME}…` : "Hey you…";
-      finalText.innerHTML = `
-        I made this just for you. <br/>
-        And I have one question:
-        <br/><br/>
-        <b>Will you be my Valentine?</b>
-        ${FROM_NAME ? `<br/><br/>— ${FROM_NAME} ❤️` : ``}
-      `;
-      openFinal();
-    }
-    saveState();
-  }
-
-  // dodge on hover (desktop)
-  noBtn.addEventListener("mouseenter", onNoTry);
-  // dodge on touch (mobile)
-  noBtn.addEventListener("touchstart", (e) => { e.preventDefault(); onNoTry(); }, {passive:false});
-
-  // ======================
-  //  YES flow
+  // YES FLOW
   // ======================
   function yesFlow(){
+    state.done = true;
+    saveState();
+
+    if (musicOn && !audio) { beep(523,0.09); setTimeout(()=>beep(659,0.09),110); setTimeout(()=>beep(784,0.11),230); }
     popConfetti();
+
     title.textContent = "YAAAAAY 💖";
     subtitle.textContent = "You just made my entire universe happier.";
 
@@ -714,7 +753,6 @@
       </small>
     `;
 
-    // final overlay becomes the “seal the deal” moment
     finalTitle.textContent = "Best. Answer. Ever.";
     finalText.innerHTML = `
       I love you. Thank you for being you. 💞<br/><br/>
@@ -722,73 +760,85 @@
       ${FROM_NAME ? `<br/><br/>— ${FROM_NAME} ❤️` : ``}
     `;
     openFinal();
-
-    // persist completion
-    localStorage.setItem(KEY, JSON.stringify({...state, done:true}));
   }
 
   yesBtn.addEventListener("click", yesFlow);
   finalYes.addEventListener("click", () => { closeFinal(); yesFlow(); });
 
   // ======================
-  //  RESET
+  // RESET
   // ======================
   resetLink.addEventListener("click", (e) => {
     e.preventDefault();
-    state = { noAttempts: 0, noIndex: 0, slideIndex: 0, hasSeenToast: true };
-    localStorage.setItem(KEY, JSON.stringify(state));
+    state = { noAttempts: 0, noIndex: 0, memIndex: 0, hasSeenToast: true, done:false };
+    saveState();
+
     title.textContent = "Hey love… I have a tiny question 💌";
-    subtitle.textContent = "No speeches. Just vibes. And one button that behaves suspiciously.";
-    bubbleText.innerHTML = `Will you be my Valentine? <br/><small>(The <b>NO</b> button is… athletic.)</small>`;
-    yesBtn.textContent = "YES 💖";
+    subtitle.textContent = "No speeches. Just vibes. And one button that refuses to be clicked.";
+    bubbleText.innerHTML = `Will you be my Valentine? <br/><small>(The <b>NO</b> button is… doing cardio.)</small>`;
     yesBtn.style.transform = "scale(1)";
     yesBtn.style.filter = "none";
     noBtn.textContent = "No 🙈";
     noBtn.style.transform = "none";
+
     placeInitialButtons();
-    setSlide(0, true);
+    renderMemory(0, true);
     updateUI();
   });
 
   // ======================
-  //  SLIDESHOW
+  // MEMORY SLIDESHOW
   // ======================
-  let showingA = true;
+  function memoryHTML(m){
+    return `
+      <div class="memoryTop">
+        <span class="pill">✨ ${m.tag}</span>
+        <span class="emojiBig">${m.emoji}</span>
+      </div>
+      <div class="memoryText">${m.text}</div>
+      <div class="memoryFooter">
+        <span>Auto-scrolling</span>
+        <span>Made for you</span>
+      </div>
+    `;
+  }
 
-  function setSlide(i, instant=false){
-    if (!SLIDES.length) return;
-    state.slideIndex = (i + SLIDES.length) % SLIDES.length;
-    const s = SLIDES[state.slideIndex];
+  function renderMemory(i, instant=false){
+    const idx = (i + MEMORIES.length) % MEMORIES.length;
+    state.memIndex = idx;
+    slideMeta.textContent = `${idx + 1} / ${MEMORIES.length}`;
 
-    slideMeta.textContent = `${state.slideIndex + 1} / ${SLIDES.length}`;
-    caption.textContent = s.caption || "";
+    const showEl = showingA ? mA : mB;
+    const hideEl = showingA ? mB : mA;
 
-    const showImg = showingA ? imgA : imgB;
-    const hideImg = showingA ? imgB : imgA;
+    showEl.innerHTML = memoryHTML(MEMORIES[idx]);
+    hideEl.classList.remove("show");
 
-    showImg.src = s.src;
-    showImg.onload = () => {
-      hideImg.classList.remove("show");
-      if (instant){
-        showImg.style.transition = "none";
-        showImg.classList.add("show");
-        // re-enable transitions
-        requestAnimationFrame(()=> showImg.style.transition = "");
-      } else {
-        showImg.classList.add("show");
-      }
-    };
+    if (instant){
+      showEl.style.transition = "none";
+      showEl.classList.add("show");
+      requestAnimationFrame(()=> showEl.style.transition = "");
+    } else {
+      requestAnimationFrame(()=> showEl.classList.add("show"));
+    }
+
     showingA = !showingA;
     saveState();
   }
 
-  function startSlideshow(){
-    setSlide(state.slideIndex, true);
-    setInterval(()=> setSlide(state.slideIndex + 1), 4200);
+  function nextMemory(){
+    renderMemory(state.memIndex + 1);
+  }
+
+  function startMemoryAuto(){
+    renderMemory(state.memIndex, true);
+    setInterval(()=> {
+      if (!state.done) nextMemory();
+    }, 4200);
   }
 
   // ======================
-  //  “REMEMBERS” EASTER EGG
+  // “REMEMBERS” EASTER EGG
   // ======================
   function loadState(){
     try{
@@ -798,17 +848,13 @@
     }catch{ return null; }
   }
   function saveState(){
-    try{
-      localStorage.setItem(KEY, JSON.stringify(state));
-    }catch{}
+    try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch{}
   }
   function showToast(msg){
     toast.textContent = msg;
     toast.classList.add("show");
     setTimeout(()=> toast.classList.remove("show"), 1600);
   }
-
-  // show a one-time “it remembers” toast if she refreshes mid-game
   (function easterEgg(){
     const nav = performance.getEntriesByType?.("navigation")?.[0];
     const refreshed = nav && nav.type === "reload";
@@ -820,22 +866,27 @@
   })();
 
   // ======================
-  //  INIT
+  // INIT
   // ======================
   window.addEventListener("resize", placeInitialButtons);
   placeInitialButtons();
   updateUI();
   setupAudio();
-  startSlideshow();
+  startMemoryAuto();
 
-  // tiny personalization on badge/title
-  if (HER_NAME){
-    badgeText.textContent = `Valentine Mode: ON for ${HER_NAME} 💘`;
+  if (HER_NAME) badgeText.textContent = `Valentine Mode: ON for ${HER_NAME} 💘`;
+
+  // If already completed previously, show end state
+  if (state.done){
+    title.textContent = "YAAAAAY 💖";
+    subtitle.textContent = "Already secured the YES 😌";
+    bubbleText.innerHTML = `<b>YES forever.</b> 💞<br/><small>Happy Valentine’s!</small>`;
   }
+
 </script>
 
 <script>
-  // Service worker registration (PWA offline-ish)
+  // PWA service worker
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('./sw.js').catch(()=>{});
