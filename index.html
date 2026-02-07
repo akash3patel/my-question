@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>💘 A Question For You</title>
+  <style>
+    :root{
+      --bg1:#ffeff6;
+      --bg2:#fff7e8;
+      --card:#ffffffcc;
+      --text:#1f1f1f;
+      --yes:#ff3b7b;
+      --no:#2f2f2f;
+      --shadow: 0 18px 55px rgba(0,0,0,.14);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 800px at 15% 15%, var(--bg1), transparent 60%),
+        radial-gradient(1200px 800px at 85% 85%, var(--bg2), transparent 60%),
+        linear-gradient(140deg, #ffe1ee, #fff3d9);
+      overflow:hidden;
+    }
+    .hearts{
+      position:fixed; inset:0; pointer-events:none; opacity:.75;
+      background-image:
+        radial-gradient(circle at 10% 30%, rgba(255,59,123,.22) 0 6px, transparent 7px),
+        radial-gradient(circle at 40% 80%, rgba(255,59,123,.18) 0 5px, transparent 6px),
+        radial-gradient(circle at 70% 25%, rgba(255,59,123,.15) 0 7px, transparent 8px),
+        radial-gradient(circle at 88% 60%, rgba(255,59,123,.12) 0 4px, transparent 5px);
+      filter: blur(.2px);
+      animation: floaty 8s ease-in-out infinite alternate;
+    }
+    @keyframes floaty{
+      from{transform:translateY(-6px)}
+      to{transform:translateY(10px)}
+    }
+
+    .card{
+      width:min(720px, 92vw);
+      padding:28px 26px 22px;
+      border-radius:28px;
+      background:var(--card);
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow);
+      border:1px solid rgba(255,255,255,.65);
+      position:relative;
+    }
+    .badge{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      padding:10px 14px;
+      border-radius:999px;
+      background: rgba(255,255,255,.8);
+      border:1px solid rgba(0,0,0,.06);
+      font-weight:600;
+      letter-spacing:.2px;
+    }
+    .badge .dot{
+      width:10px; height:10px; border-radius:999px;
+      background: linear-gradient(135deg, #ff3b7b, #ff8aa8);
+      box-shadow: 0 0 0 6px rgba(255,59,123,.12);
+    }
+    h1{
+      margin:16px 0 8px;
+      font-size: clamp(28px, 4.6vw, 44px);
+      line-height:1.05;
+    }
+    .sub{
+      margin:0 0 16px;
+      font-size: clamp(14px, 2.4vw, 18px);
+      opacity:.82;
+    }
+    .stage{
+      position:relative;
+      height:240px;
+      margin-top:10px;
+      border-radius:22px;
+      border:1px dashed rgba(0,0,0,.10);
+      background: rgba(255,255,255,.55);
+      overflow:hidden;
+    }
+    .bubble{
+      position:absolute;
+      left:16px; top:16px;
+      max-width: 78%;
+      padding:12px 14px;
+      border-radius:18px;
+      background:#fff;
+      border:1px solid rgba(0,0,0,.07);
+      box-shadow: 0 12px 25px rgba(0,0,0,.08);
+      font-size: 15px;
+      line-height:1.35;
+    }
+    .bubble b{color:#ff2f75}
+    .buttons{
+      position:absolute;
+      left:0; top:0; right:0; bottom:0;
+    }
+    button{
+      position:absolute;
+      border:0;
+      cursor:pointer;
+      border-radius:16px;
+      font-weight:800;
+      letter-spacing:.3px;
+      transition: transform .15s ease, filter .15s ease;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    button:active{ transform: scale(.98); }
+    .yes{
+      background: linear-gradient(135deg, var(--yes), #ff86ad);
+      color:#fff;
+      box-shadow: 0 16px 30px rgba(255,59,123,.28);
+      padding:16px 22px;
+      font-size: 18px;
+    }
+    .no{
+      background: rgba(0,0,0,.86);
+      color:#fff;
+      padding:14px 18px;
+      font-size: 15px;
+      box-shadow: 0 12px 26px rgba(0,0,0,.18);
+    }
+    .hint{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      margin-top:14px;
+      font-size:13px;
+      opacity:.75;
+    }
+    .tiny{
+      font-size:12px;
+      opacity:.7;
+      margin-top:10px;
+      line-height:1.4;
+    }
+
+    /* confetti */
+    .confetti{
+      position:fixed; inset:0; pointer-events:none; overflow:hidden;
+    }
+    .piece{
+      position:absolute;
+      width:10px; height:14px;
+      border-radius:3px;
+      opacity:.95;
+      animation: fall 1.7s linear forwards;
+    }
+    @keyframes fall{
+      0%{ transform: translateY(-20px) rotate(0deg); }
+      100%{ transform: translateY(110vh) rotate(540deg); }
+    }
+
+    /* final overlay */
+    .overlay{
+      position:fixed; inset:0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      background: rgba(10,10,10,.35);
+      backdrop-filter: blur(6px);
+    }
+    .modal{
+      width:min(720px, 92vw);
+      border-radius:28px;
+      background:#fff;
+      box-shadow: var(--shadow);
+      padding:26px 22px;
+      border: 1px solid rgba(0,0,0,.06);
+      text-align:center;
+    }
+    .modal h2{
+      margin:10px 0 6px;
+      font-size: clamp(26px, 4vw, 38px);
+    }
+    .modal p{
+      margin:0 auto 18px;
+      max-width: 56ch;
+      opacity:.85;
+      line-height:1.45;
+    }
+    .modal .row{
+      display:flex;
+      gap:12px;
+      justify-content:center;
+      flex-wrap:wrap;
+      margin-top:10px;
+    }
+    .modal .row button{
+      position:static;
+      padding:14px 18px;
+      border-radius:16px;
+      font-size:16px;
+    }
+    .soft{
+      background:#f1f1f3;
+      color:#1b1b1b;
+      box-shadow:none;
+      border:1px solid rgba(0,0,0,.07);
+      font-weight:800;
+    }
+
+    .footer{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-top:16px;
+      gap:10px;
+      font-size:12px;
+      opacity:.7;
+    }
+    .link{
+      text-decoration:none;
+      color:#ff2f75;
+      font-weight:700;
+    }
+  </style>
+</head>
+<body>
+  <div class="hearts"></div>
+
+  <div class="card">
+    <div class="badge"><span class="dot"></span><span>Valentine Mode: ON</span></div>
+    <h1 id="title">Hey love… I have a tiny question 💌</h1>
+    <p class="sub" id="subtitle">Answer honestly. (But I may be a little dramatic.)</p>
+
+    <div class="stage" id="stage">
+      <div class="bubble" id="bubble">
+        <span id="bubbleText">
+          Will you be my Valentine? <br/>
+          <small>(Warning: the <b>NO</b> button is… shy.)</small>
+        </span>
+      </div>
+
+      <div class="buttons" id="buttons">
+        <button class="yes" id="yesBtn">YES 💖</button>
+        <button class="no" id="noBtn">No 🙈</button>
+      </div>
+    </div>
+
+    <div class="hint">
+      <span id="counter">Attempts to press “No”: 0</span>
+      <span id="mood">My mood: 🥺</span>
+    </div>
+
+    <div class="tiny" id="tiny">
+      P.S. If you’re not ready right now, that’s okay — I only want a “yes” if you mean it. ❤️
+    </div>
+
+    <div class="footer">
+      <span>Made with excessive love & a tiny bit of chaos.</span>
+      <a class="link" href="#" id="resetLink">Reset</a>
+    </div>
+  </div>
+
+  <div class="confetti" id="confetti"></div>
+
+  <div class="overlay" id="overlay">
+    <div class="modal">
+      <div style="font-size:38px">💘</div>
+      <h2 id="finalTitle">I choose you. Always.</h2>
+      <p id="finalText">
+        I’ve been building up the courage to ask you this in a cute way…
+        Would you make me the happiest person and be my Valentine?
+        <br/><br/>
+        <b>No tricks now:</b> I only want a yes if it’s a real yes.
+      </p>
+      <div class="row">
+        <button class="yes" id="finalYes">YES 💖</button>
+        <button class="soft" id="finalLater">Not now (hug me first)</button>
+      </div>
+      <p style="margin-top:14px; font-size:12px; opacity:.72">
+        (If you tap “Not now”, I’ll stop the teasing and we’ll come back later.)
+      </p>
+    </div>
+  </div>
+
+<script>
+  // ---- Personalize these quickly ----
+  const HER_NAME = ""; // e.g. "Priya"
+  const FROM_NAME = ""; // e.g. "Akash"
+
+  const noLabels = [
+    "No 🙈",
+    "Not today 😅",
+    "Maybe… 😳",
+    "I’m shy 🫣",
+    "Ask me nicer 😤",
+    "I refuse (lovingly) 😈",
+    "Hmm… 👀",
+    "Try again 😌",
+    "Nope 😂",
+    "I said no… (did I?) 🤭",
+    "Ok stop 😭",
+    "This is suspicious 🕵️‍♀️",
+  ];
+
+  const teaseLines = [
+    "The “No” button is practicing social distancing.",
+    "Plot twist: the “No” button has stage fright.",
+    "Your finger almost caught it. ALMOST.",
+    "I trained it with cardio. 🏃‍♀️💨",
+    "It’s not you… it’s my UI being dramatic.",
+    "Okay okay—what if you click YES just to see what happens?",
+    "If you choose NO, my heart will buffer… 🥺",
+    "This app was made with love and mild mischief.",
+    "The No button has entered stealth mode.",
+    "I promise the YES route is adorable.",
+  ];
+
+  const moods = ["🥺","😟","😩","😭","🫠","😤","😳","🤭","😇","💘"];
+
+  const stage = document.getElementById("stage");
+  const yesBtn = document.getElementById("yesBtn");
+  const noBtn = document.getElementById("noBtn");
+  const bubbleText = document.getElementById("bubbleText");
+  const counter = document.getElementById("counter");
+  const mood = document.getElementById("mood");
+  const overlay = document.getElementById("overlay");
+  const finalYes = document.getElementById("finalYes");
+  const finalLater = document.getElementById("finalLater");
+  const confetti = document.getElementById("confetti");
+  const resetLink = document.getElementById("resetLink");
+  const title = document.getElementById("title");
+  const subtitle = document.getElementById("subtitle");
+  const finalTitle = document.getElementById("finalTitle");
+  const finalText = document.getElementById("finalText");
+
+  let noAttempts = 0;
+  let noIndex = 0;
+
+  function rand(min, max){ return Math.floor(Math.random()*(max-min+1))+min; }
+
+  function placeInitialButtons(){
+    // place YES bottom-left-ish; NO bottom-right-ish
+    const rect = stage.getBoundingClientRect();
+    const pad = 14;
+
+    yesBtn.style.left = pad + "px";
+    yesBtn.style.top  = (rect.height - 80) + "px";
+
+    noBtn.style.left  = (rect.width - 120) + "px";
+    noBtn.style.top   = (rect.height - 76) + "px";
+  }
+
+  function moveNoButton(){
+    const rect = stage.getBoundingClientRect();
+    const btnRect = noBtn.getBoundingClientRect();
+
+    const maxX = rect.width - btnRect.width - 14;
+    const maxY = rect.height - btnRect.height - 14;
+
+    const x = rand(14, Math.max(14, maxX));
+    const y = rand(60, Math.max(60, maxY)); // keep away from bubble a bit
+
+    noBtn.style.left = x + "px";
+    noBtn.style.top  = y + "px";
+    noBtn.style.transform = `rotate(${rand(-8, 8)}deg)`;
+  }
+
+  function growYesButton(){
+    // Increase YES size slightly each time
+    const scale = Math.min(1 + noAttempts * 0.08, 1.9);
+    yesBtn.style.transform = `scale(${scale})`;
+    yesBtn.style.filter = `brightness(${1 + Math.min(noAttempts*0.03, 0.25)})`;
+  }
+
+  function updateTease(){
+    const tease = teaseLines[rand(0, teaseLines.length-1)];
+    bubbleText.innerHTML = `Will you be my Valentine? <br/><small><b>${tease}</b></small>`;
+  }
+
+  function updateUI(){
+    counter.textContent = `Attempts to press “No”: ${noAttempts}`;
+    mood.textContent = `My mood: ${moods[Math.min(noAttempts, moods.length-1)]}`;
+    noBtn.textContent = noLabels[noIndex % noLabels.length];
+    noIndex++;
+  }
+
+  function popConfetti(){
+    confetti.innerHTML = "";
+    const pieces = 110;
+    for(let i=0;i<pieces;i++){
+      const p = document.createElement("div");
+      p.className = "piece";
+      p.style.left = rand(0, 100) + "vw";
+      p.style.top = rand(-30, -5) + "vh";
+      p.style.background = `hsl(${rand(330, 30)}, ${rand(70,95)}%, ${rand(55,70)}%)`;
+      p.style.transform = `rotate(${rand(0,360)}deg)`;
+      p.style.animationDuration = (Math.random()*0.9 + 1.1) + "s";
+      p.style.width = rand(7, 12) + "px";
+      p.style.height = rand(9, 16) + "px";
+      confetti.appendChild(p);
+    }
+    setTimeout(()=> confetti.innerHTML="", 1900);
+  }
+
+  function openFinal(){
+    overlay.style.display = "flex";
+  }
+  function closeFinal(){
+    overlay.style.display = "none";
+  }
+
+  // “NO” interaction: dodgy + playful + escalates to a respectful final prompt
+  function onNoTry(){
+    noAttempts++;
+    updateUI();
+    updateTease();
+    moveNoButton();
+    growYesButton();
+
+    // At some point, switch to a respectful final screen
+    if(noAttempts === 6){
+      title.textContent = `Okay okay… I get it 😅`;
+      subtitle.textContent = `No more chasing. Just one honest question.`;
+      finalTitle.textContent = HER_NAME ? `${HER_NAME}… my heart says this:` : `My heart says this:`;
+      finalText.innerHTML = `
+        I made this because I love you — a lot. 🥹<br/><br/>
+        Will you be my Valentine?
+        <br/><br/>
+        <b>No tricks now:</b> I only want a “yes” if you truly mean it.
+        ${FROM_NAME ? `<br/><br/>— ${FROM_NAME} ❤️` : ``}
+      `;
+      openFinal();
+    }
+  }
+
+  // Make the NO button dodge when hovered/touched
+  noBtn.addEventListener("mouseenter", onNoTry);
+
+  // On mobile, make it dodge on touchstart
+  noBtn.addEventListener("touchstart", (e) => {
+    e.preventDefault();
+    onNoTry();
+  }, {passive:false});
+
+  yesBtn.addEventListener("click", () => {
+    popConfetti();
+    title.textContent = "YAAAAAY 💖";
+    subtitle.textContent = "You just made my entire universe happier.";
+    bubbleText.innerHTML = `
+      <b>YES?!</b> 😭💘<br/>
+      <small>
+        Congratulations, you are now officially my Valentine.<br/>
+        (Rewards: kisses, snacks, and unlimited “I love you”s.)
+      </small>
+    `;
+    // bring up final as a nice “seal the deal”
+    finalTitle.textContent = "Best. Answer. Ever.";
+    finalText.innerHTML = `
+      I love you. Thank you for being you. 💞<br/><br/>
+      <b>Valentine’s plan:</b> your favorite food + a sweet surprise + me being extra grateful.
+      ${FROM_NAME ? `<br/><br/>— ${FROM_NAME} ❤️` : ``}
+    `;
+    openFinal();
+  });
+
+  finalYes.addEventListener("click", () => {
+    closeFinal();
+    popConfetti();
+    yesBtn.click();
+  });
+
+  finalLater.addEventListener("click", () => {
+    // respectful exit: stop teasing, show a warm message
+    closeFinal();
+    title.textContent = "That’s okay ❤️";
+    subtitle.textContent = "No pressure. I love you either way.";
+    bubbleText.innerHTML = `
+      <b>Not now.</b> Thank you for being honest. 🫶<br/>
+      <small>
+        When you feel ready, tap <b>Reset</b>… or just hug me and we’ll talk.
+      </small>
+    `;
+    // Disable the dodging chaos after "Not now"
+    noBtn.style.display = "none";
+    yesBtn.textContent = "HUG 🤍";
+    yesBtn.onclick = () => {
+      popConfetti();
+      bubbleText.innerHTML = `<b>HUG RECEIVED.</b> 🥹💞<br/><small>Whenever you’re ready, I’m here.</small>`;
+    };
+  });
+
+  resetLink.addEventListener("click", (e) => {
+    e.preventDefault();
+    noAttempts = 0;
+    noIndex = 0;
+    title.textContent = "Hey love… I have a tiny question 💌";
+    subtitle.textContent = "Answer honestly. (But I may be a little dramatic.)";
+    bubbleText.innerHTML = `Will you be my Valentine? <br/><small>(Warning: the <b>NO</b> button is… shy.)</small>`;
+    counter.textContent = `Attempts to press “No”: 0`;
+    mood.textContent = `My mood: 🥺`;
+    noBtn.style.display = "block";
+    yesBtn.textContent = "YES 💖";
+    yesBtn.style.transform = "scale(1)";
+    yesBtn.style.filter = "none";
+    yesBtn.onclick = null;
+    placeInitialButtons();
+  });
+
+  window.addEventListener("resize", placeInitialButtons);
+  placeInitialButtons();
+</script>
+</body>
+</html>
