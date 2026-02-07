@@ -1,4 +1,5 @@
 const CACHE = "valentine-cache-v2";
+const MUSIC_SRC = "music/love.mp3";
 const ASSETS = [
   "./",
   "./index.html",
